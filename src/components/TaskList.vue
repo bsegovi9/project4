@@ -2,21 +2,28 @@
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-  tasks: Array,
+  tasks: Array
 });
 
-const emit = defineEmits(['taskDeleted']);
+const emit = defineEmits(['taskToggled', 'taskDeleted']);
 
-const deleteTask = (index) => {
-  emit('taskDeleted', index);
+const toggleTask = (id) => {
+  emit('taskToggled', id);
+};
+
+const deleteTask = (id) => {
+  emit('taskDeleted', id);
 };
 </script>
 
 <template>
   <ul>
-    <li v-for="(task, index) in tasks" :key="index">
-      {{ task }}
-      <button @click="deleteTask(index)">X</button>
+    <li v-for="task in tasks" :key="task.id">
+      <input type="checkbox" :checked="task.completed" @change="toggleTask(task.id)" />
+      <span :style="{ textDecoration: task.completed ? 'line-through' : 'none' }">
+        {{ task.text }}
+      </span>
+      <button @click="deleteTask(task.id)">X</button>
     </li>
   </ul>
 </template>
@@ -27,16 +34,16 @@ ul {
   padding: 0;
 }
 li {
-  padding: 5px;
-  background: #eee;
-  margin: 5px 0;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  margin: 5px 0;
 }
 button {
   background: red;
   color: white;
   border: none;
+  padding: 5px;
   cursor: pointer;
 }
 </style>
