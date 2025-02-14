@@ -1,11 +1,16 @@
 <script setup>
 import { ref } from 'vue';
 import AddTask from './components/AddTask.vue';
+import TaskList from './components/TaskList.vue';
 
 const tasks = ref([]);
 
 const handleTaskAdded = (task) => {
   tasks.value.push(task);
+};
+
+const handleTaskDeleted = (index) => {
+  tasks.value.splice(index, 1);
 };
 </script>
 
@@ -13,9 +18,7 @@ const handleTaskAdded = (task) => {
   <div class="container">
     <h2>Task List</h2>
     <AddTask @taskAdded="handleTaskAdded" />
-    <ul>
-      <li v-for="(task, index) in tasks" :key="index">{{ task }}</li>
-    </ul>
+    <TaskList :tasks="tasks" @taskDeleted="handleTaskDeleted" />
   </div>
 </template>
 
